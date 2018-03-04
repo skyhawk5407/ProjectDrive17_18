@@ -20,6 +20,7 @@ msg/_*.py
 # Ignore generated docs
 *.dox
 *.wikidoc
+CMakeLists.txt
 
 # eclipse stuff
 .project
