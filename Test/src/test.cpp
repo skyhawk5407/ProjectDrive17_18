@@ -1,4 +1,5 @@
 // ZED includes
+#include "ros/ros.h"
 #include <sl_zed/Camera.hpp>
 
 // OpenCV includes
@@ -15,6 +16,13 @@ void printHelp();
 
 int main(int argc, char **argv)
 {
+  //set up ros
+  ros::init(argc, argv, "testtest");
+  ros::NodeHandle n;
+
+  ros::Publisher translation_data = n.advertise<std_msg::String>("translation_data", 1000);
+  ros::Rate loop_rate(10);
+
   //Set up the Zed Camera
   Camera zed;
   InitParameters init_params;
@@ -67,37 +75,39 @@ int main(int argc, char **argv)
   curr.x=250;
   curr.y=250;
   float translation_left_to_center = zed.getCameraInformation().calibration_parameters.T.x *0.5f;
+  std::ofstream outputFile;
+  outputFile.open("data.txt");
+
 
   //Loop until 'q' is pressed.
   char key = ' ';
-  while(key != 'q')
+  while(key != 'q' && ros::ok())
   {
     if (zed.grab(runtime_parameters) == SUCCESS)
     {
       TRACKING_STATE state = zed.getPosition(zed_pose, REFERENCE_FRAME_WORLD);
       zed.retrieveImage(image_zed, VIEW_LEFT, MEM_CPU, new_width, new_height);
-      //Display translation and timestamp
-      //printf("Translation: tx: %.3f, ty:  %.3f, tz:  %.3f, timestamp: %llu\n",
-        //  zed_pose.getTranslation().tx, zed_pose.getTranslation().ty,
-        //  zed_pose.getTranslation().tz, zed_pose.timestamp);
-      // Display orientation quaternion
-      //printf("Orientation: ox: %.3f, oy:  %.3f, oz:  %.3f, ow: %.3f\n",
-        //  zed_pose.getOrientation().ox, zed_pose.getOrientation().oy,
-        //  zed_pose.getOrientation().oz, zed_pose.getOrientation().ow);
-
-      //transformPose(zed_pose.pose_data, translation_left_to_center);
+      
       if(state == TRACKING_STATE_OK)
       {
         prev = curr;
-        //sl::float4 quaternion = zed_pose.getOrientation();
-        //printf("Quat: %.3f,%.3f,%.3f,%.3f\n",quaternion[0],quaternion[1],
-          //quaternion[2],quaternion[3]);
+	
+        //create the msg
+        std_msgs::String msg;
+        std::stringstream ss;
 
-        //sl::float3 rotation = zed_pose.getEulerAngles();
-        //printf("Angles: %.3f,%.3f,%.3f\n",rotation[0],rotation[1],rotation[2]);
+        ss<<std::setprecision(5)<<translation[0]<<","<<translation[1]<<","<<translation[2]<<", at "<<zed_pose.timestamp<<"\n";
+        msg.data = ss.str();
+        translation_data.publish(ss);
+	
+	ros::spinOnce();
+	loop_rate.sleep();
 
+        curr.x=250+10*translation[0];
         sl::float3 translation = zed_pose.getTranslation();
-        printf("Translation: %.3f,%.3f,%.3f\n",translation[0],translation[1],translation[2]);
+        printf("Translation: %.3f,%.3f,%.3f, %lu\n",translation[0],translation[1],translation[2],
+		zed_pose.timestamp);
+        outputFile<<std::setprecision(5)<<translation[0]<<","<<translation[1]<<","<<translation[2]<<","<<zed_pose.timestamp<<"\n";
         curr.x=250+10*translation[0];
         curr.y=250-10*translation[2];
 
@@ -109,6 +119,7 @@ int main(int argc, char **argv)
       key = cv::waitKey(10);
     }
   }
+  outputFile.close();
   zed.close();
   return 0;
 }
