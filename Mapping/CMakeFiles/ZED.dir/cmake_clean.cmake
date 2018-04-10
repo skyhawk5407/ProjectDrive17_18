@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ZED.dir/src/test.o"
   "CMakeFiles/ZED.dir/src/Mapping.o"
   "ZED.pdb"
   "ZED"

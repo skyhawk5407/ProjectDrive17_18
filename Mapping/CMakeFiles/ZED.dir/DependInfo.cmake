@@ -5,7 +5,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ubuntu/ProjectDrive17_18/Mapping/src/Mapping.cpp" "/home/ubuntu/ProjectDrive17_18/Mapping/CMakeFiles/ZED.dir/src/Mapping.o"
-  "/home/ubuntu/ProjectDrive17_18/Mapping/src/test.cpp" "/home/ubuntu/ProjectDrive17_18/Mapping/CMakeFiles/ZED.dir/src/test.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

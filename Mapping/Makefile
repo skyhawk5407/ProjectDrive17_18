@@ -138,21 +138,6 @@ src/Mapping.s:
 	$(MAKE) -f CMakeFiles/ZED.dir/build.make CMakeFiles/ZED.dir/src/Mapping.s
 .PHONY : src/Mapping.s
 
-# target to build an object file
-src/test.o:
-	$(MAKE) -f CMakeFiles/ZED.dir/build.make CMakeFiles/ZED.dir/src/test.o
-.PHONY : src/test.o
-
-# target to preprocess a source file
-src/test.i:
-	$(MAKE) -f CMakeFiles/ZED.dir/build.make CMakeFiles/ZED.dir/src/test.i
-.PHONY : src/test.i
-
-# target to generate assembly for a file
-src/test.s:
-	$(MAKE) -f CMakeFiles/ZED.dir/build.make CMakeFiles/ZED.dir/src/test.s
-.PHONY : src/test.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,9 +150,6 @@ help:
 	@echo "... src/Mapping.o"
 	@echo "... src/Mapping.i"
 	@echo "... src/Mapping.s"
-	@echo "... src/test.o"
-	@echo "... src/test.i"
-	@echo "... src/test.s"
 .PHONY : help
 
 
